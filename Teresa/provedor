@@ -1,0 +1,47 @@
+from flask import Flask, request, jsonify
+
+app_provedor = Flask(__name__)
+
+livros = []
+
+@app_provedor.route('/livros', methods=['GET'])
+def obter_livros():
+    livros_formatados = [{'id': livro['id'], 'titulo': livro['titulo'], 'autor': livro['autor'], 'genero': livro['genero']} for livro in livros]
+    return jsonify(livros_formatados)
+
+@app_provedor.route('/cadastrar_livro', methods=['POST'])
+def cadastrar_livro():
+    dados_livro = request.get_json()
+
+    titulo = dados_livro.get('titulo')
+    autor = dados_livro.get('autor')
+    genero = dados_livro.get('genero')
+
+    if titulo and autor and genero:
+        novo_livro = {
+            'id': len(livros) + 1,
+            'titulo': titulo,
+            'autor': autor,
+            'genero': genero
+        }
+
+        livros.append(novo_livro)
+
+        livro_formatado = {'id': novo_livro['id'], 'titulo': novo_livro['titulo'], 'autor': novo_livro['autor'], 'genero': novo_livro['genero']}
+        return jsonify({'mensagem': 'Livro cadastrado com sucesso!', 'livro': livro_formatado}), 201
+    else:
+        return jsonify({'mensagem': 'Por favor, forneça título, autor e gênero do livro'}), 400
+
+@app_provedor.route('/remover_livro/<int:id_livro>', methods=['DELETE'])
+def remover_livro(id_livro):
+    livro = next((livro for livro in livros if livro['id'] == id_livro), None)
+
+    if livro:
+        livros.remove(livro)
+        livro_formatado = {'id': livro['id'], 'titulo': livro['titulo'], 'autor': livro['autor'], 'genero': livro['genero']}
+        return jsonify({'mensagem': f'Livro com ID {id_livro} removido com sucesso!', 'livro': livro_formatado}), 200
+    else:
+        return jsonify({'mensagem': f'Livro com ID {id_livro} não encontrado'}), 404
+
+if __name__ == '__main__':
+    app_provedor.run(port=5001, debug=True)
