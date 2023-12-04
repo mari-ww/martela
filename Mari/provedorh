@@ -1,0 +1,44 @@
+# Provedor
+from flask import Flask, request, jsonify
+
+app_provedor = Flask(__name__)
+
+avaliacoes = {}  # Dicionário para armazenar avaliações dos livros
+
+@app_provedor.route('/avaliacoes', methods=['GET'])
+def obter_avaliacoes():
+    return jsonify(list(avaliacoes.values()))
+
+@app_provedor.route('/avaliar_livro', methods=['POST'])
+def avaliar_livro():
+    dados_avaliacao = request.get_json()
+
+    id_livro = dados_avaliacao.get('id_livro')
+    avaliacao = dados_avaliacao.get('avaliacao')
+
+    if id_livro is not None and avaliacao is not None:
+        if id_livro in avaliacoes:
+            # Se já existe uma avaliação para este livro, calcule a média
+            avaliacoes[id_livro]['avaliacao'] = round((avaliacoes[id_livro]['avaliacao'] + avaliacao) / 2, 1)
+        else:
+            # Se não existe, adicione a nova avaliação
+            nova_avaliacao = {
+                'id_livro': id_livro,
+                'avaliacao': avaliacao
+            }
+            avaliacoes[id_livro] = nova_avaliacao
+
+        return jsonify(avaliacoes[id_livro]), 201
+    else:
+        return jsonify({'mensagem': 'Por favor, forneça o ID do livro e a avaliação'}), 400
+
+@app_provedor.route('/avaliacoes/<int:id_livro>', methods=['DELETE'])
+def remover_avaliacao_por_id(id_livro):
+    if id_livro in avaliacoes:
+        del avaliacoes[id_livro]
+        return jsonify({'mensagem': f'Avaliação removida com sucesso para o livro de ID: {id_livro}'}), 200
+    else:
+        return jsonify({'mensagem': f'Não há avaliações para o livro de ID: {id_livro}'}), 404
+
+if __name__ == '__main__':
+    app_provedor.run(port=5002, debug=True)

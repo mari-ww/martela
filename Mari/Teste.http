@@ -1,0 +1,23 @@
+POST http://localhost:5002/avaliar_livro
+Content-Type: application/json
+
+{
+  "id_livro": 1,
+  "avaliacao": 10
+}
+
+
+
+
+
+// ADICIONAR AVALIACAO
+//POST http://localhost:5002/avaliar_livro
+//Content-Type: application/json
+
+//{
+//  "id_livro": 1,
+//  "avaliacao": 4
+//}
+
+// REMOVER AVALIACAO
+//DELETE http://localhost:5002/remover_avaliacao?id_livro=1

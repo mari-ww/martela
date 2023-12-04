@@ -1,0 +1,22 @@
+# Consumidor
+import requests
+
+provedor_url = "http://localhost:5002"
+
+def obter_avaliacao():
+    response = requests.get(f"{provedor_url}/avaliacoes")
+    return response.json()
+
+def avaliar_livro(id_livro, avaliacao):
+    dados_avaliacao = {'id_livro': id_livro, 'avaliacao': avaliacao}
+    response = requests.post(f"{provedor_url}/avaliar_livro", json=dados_avaliacao)
+    return response.json()
+
+def remover_avaliacao_por_id(id_livro):
+    response = requests.delete(f"{provedor_url}/avaliacoes/{id_livro}")
+    return response.json()
+
+if __name__ == '__main__':
+    # Exemplo de utilização:
+    avaliacoes_cadastradas = obter_avaliacao()
+    print("Avaliações Cadastradas:", avaliacoes_cadastradas)
