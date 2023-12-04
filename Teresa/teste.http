@@ -1,0 +1,21 @@
+POST http://localhost:5001/cadastrar_livro
+Content-Type: application/json
+
+{
+  "titulo": "Alice No País Das Maravilhas",
+  "autor": "Lewis Carroll",
+  "genero": "Fantasia"
+}
+
+
+//para remover: DELETE http://localhost:5001/remover_livro/1
+
+//para adicionar:
+//POST http://localhost:5001/cadastrar_livro
+//Content-Type: application/json
+
+//{
+//  "titulo": "Novo Livro",
+//  "autor": "Novo Autor",
+//  "genero": "Novo Gênero"
+//}

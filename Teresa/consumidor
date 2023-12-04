@@ -1,0 +1,22 @@
+# Código 1 - Cliente
+
+import requests
+
+livros_provedor_url = "http://localhost:5001"
+
+def obter_livros_cadastrados():
+    response = requests.get(f"{livros_provedor_url}/livros")
+    return response.json()
+
+def remover_livro_por_id(id_livro):
+    response = requests.delete(f"{livros_provedor_url}/remover_livro/{id_livro}")
+    return response.json()
+
+if __name__ == '__main__':
+    # Exemplo de utilização:
+    livros_cadastrados = obter_livros_cadastrados()
+    print("Livros Cadastrados:", livros_cadastrados)
+
+    id_livro_a_remover = 0  # Substitua pelo ID do livro que deseja remover
+    resposta_remocao = remover_livro_por_id(id_livro_a_remover)
+    print("Resposta da Remoção:", resposta_remocao)
