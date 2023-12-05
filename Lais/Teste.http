@@ -1,0 +1,9 @@
+POST http://localhost:5002/recomendacao
+Content-Type: application/json
+
+{
+    "usuario_id": 1,
+    "preferencias": {
+        "genero": "Fantasia"
+    }
+}
